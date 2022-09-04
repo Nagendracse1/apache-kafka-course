@@ -12,7 +12,7 @@ bin/kafka-topics.sh \
 --create \
 --replication-factor 1 \
 --partitions 3 \
---topic test
+--topic animal
 
 LIST TOPICS
 bin/kafka-topics.sh \
@@ -28,18 +28,47 @@ bin/kafka-topics.sh \
 START CONSOLE PRODUCER
 bin/kafka-console-producer.sh \
 --broker-list localhost:9092 \
---topic test
+--topic animal
 
 START CONSOLE CONSUMER
 bin/kafka-console-consumer.sh \
 --bootstrap-server localhost:9092 \
---topic test
+--topic animal
 
 START CONSOLE CONSUMER AND READ MESSAGES FROM BEGINNING
 bin/kafka-console-consumer.sh \
 --bootstrap-server localhost:9092 \
---topic test \
+--topic animal \
 --from-beginning
+
+START CONSOLE CONSUMER AND READ MESSAGES FROM BEGINNING & by specific partition
+bin/kafka-console-consumer.sh \
+--bootstrap-server localhost:9092 \
+--partition 1 \
+--topic animal \
+--from-beginning
+
+START CONSOLE CONSUMER AND READ MESSAGES by offset
+bin/kafka-console-consumer.sh \
+--bootstrap-server localhost:9092 \
+--partition 1 \
+--topic animal \
+--offset 1
+
+##To run multiple broker-
+- go to main directory of kafka 
+- go to config file
+- create duplicate of server.properties equal to number of broker required
+- go to all broker one by one & follow this
+- change broker.id=0 as per number of broker it must be different for all broker
+- uncomment this listeners=PLAINTEXT://:9093 & update the port for each server it must be different for all.
+- run this for 3 broker in differnt terminal
+  bin/kafka-server-start.sh config/server0.properties
+  bin/kafka-server-start.sh config/server1.properties
+  bin/kafka-server-start.sh config/server.properties
+  
+ GET INFORMATION FROM ZOOKEEPER FROM ACTIVE BROKER 
+ bin/zookeeper-shell.sh localhost:2181 ls /brokers/ids
 
 START CONSOLE CONSUMER WITH SPECIFIC CONSUMER GROUP
 bin/kafka-console-consumer.sh \
